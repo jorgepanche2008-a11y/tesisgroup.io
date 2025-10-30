@@ -1,0 +1,442 @@
+<!DOCTYPE html><html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bienestar y Sobriedad — Perfil & Capacitaciones</title>
+  <style>
+    :root {
+      --bg: #0f172a; /* slate-900 */
+      --panel: #111827; /* gray-900 */
+      --muted: #1f2937; /* gray-800 */
+      --text: #e5e7eb; /* gray-200 */
+      --subtext: #9ca3af; /* gray-400 */
+      --brand: #22c55e; /* green-500 */
+      --brand-2: #86efac; /* green-300 */
+      --warn: #f59e0b; /* amber-500 */
+      --danger: #ef4444; /* red-500 */
+      --ok: #3b82f6; /* blue-500 */
+      --radius: 18px;
+    }* { box-sizing: border-box; }
+body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: radial-gradient(1200px 800px at 20% 0%, #111827 10%, #0b1020 70%, #070b18 100%); color: var(--text); }
+a { color: var(--brand-2); text-decoration: none; }
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+.card { background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,.35); backdrop-filter: blur(6px); }
+.card.pad { padding: 20px; }
+
+.grid { display: grid; gap: 16px; }
+.grid-2 { grid-template-columns: 1fr; }
+@media (min-width: 900px){ .grid-2 { grid-template-columns: 1.1fr .9fr; } }
+
+.title { font-weight: 800; letter-spacing: -0.02em; }
+.title.xl { font-size: clamp(28px, 4vw, 40px); }
+.title.lg { font-size: 22px; }
+.muted { color: var(--subtext); }
+
+.row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+
+label { display:block; font-size: 14px; color: var(--subtext); margin-bottom:6px; }
+input, select, textarea { width:100%; padding:12px 14kground: transparent; color: var(--text); border:1px solid rgba(255,255,255,0.14); }
+.btn.warn { background: linear-gradient(180deg, #f59e0b, #d97706); color:#1b1202; }
+.btn.danger { background: linear-gradient(180deg, #ef4444, #dc2626); color:#2a0606; }
+
+.pill { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius: 999px; border:1px solid rgba(255,255,255,0.12); background:#0c162b; font-size: 12px; }
+.tag { display:inline-block; padding:6px 10px; border-radius: 999px; background:#0e1a33; border:1px solid rgba(255,255,255,0.08); font-size:12px; margin:4px 6px 0 0; }
+
+.progress { height: 10px; background: #0d1428; border-radius: 999px; overflow: hidden; border:1px solid rgba(255,255,255,0.1); }
+.progress > i { display:block; height:100%; width:0%; background: linear-gradient(90deg, #22c55e, #3b82f6); }
+
+.hidden { display:none; }
+.divider { height:1px; background: rgba(255,255,255,0.1); margin: 14px 0; }
+
+.list { display:grid; gap:10px; }
+.item { padding:12px; border-radius: 14px; background:#0b1224; border:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between; gap:10px; }
+
+.toast { position: fixed; right: 16px; bottom: 16px; background: #0b1224; color: var(--text); border: 1px solid rgba(255,255,255,.12); padding: 14px 16px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.35); display:none; }
+
+.diag { margin-top: 16px; }
+.diag pre { background:#0b1224; border:1px solid rgba(255,255,255,.1); padding:12px; border-radius:12px; overflow:auto; }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="grid grid-2">
+      <div class="card pad">
+        <div class="pill" id="privacyPillTop">🔒 Privacidad primero · Cifrado AES‑GCM local</div>
+        <h1 class="title xl" style="margin:10px 0 6px">Bienestar y Sobriedad</h1>
+        <p class="muted">Registro, perfil personalizado, capacitaciones basadas en evidencia, retos saludables y seguimiento de avances — pensado para jóvenes en proceso de cambio. Sin servidor, sin rastreadores.</p>
+        <div class="row" style="margin-top:12px">
+          <button class="btn" id="goRegister">Crear cuenta</button>
+          <button class="btn ghost" id="goLogin">Ya tengo cuenta</button>
+        </div>
+      </div>
+      <div class="card pad">
+        <h2 class="title lg">Principios de confianza</h2>
+        <ul class="muted" style="line-height:1.7; padding-left:18px">
+          <li>Solo tú controlas tus datos (cifrado AES‑GCM en tu dispositivo).</li>
+          <li>Adaptamos la experiencia según tu edad, intereses y necesidades.</li>
+          <li>Retos semanales y tareas micro‑hábitos para consolidar avances.</li>
+          <li>Capacitaciones cortas: mitos vs. realidad, manejo de antojos, prevención de recaídas.</li>
+        </ul>
+      </div>
+    </header><div id="diagBanner" class="card pad diag hidden" role="alert">
+  <strong>⚠️ Diagnóstico de seguridad:</strong>
+  <p class="muted" id="diagText">—</p>
+  <div class="row" style="margin-top:8px">
+    <button class="btn ghost" id="btnRunTests">Ejecutar pruebas de cifrado</button>
+    <button class="btn" id="btnHideDiag">Ocultar</button>
+  </div>
+  <pre id="testOutput" class="hidden"></pre>
+</div>
+
+<!-- Auth -->
+<section class="grid grid-2" id="authSection" style="margin-top:16px">
+  <div class="card pad">
+    <h3 class="title lg">Registro</h3>
+    <div class="divider"></div>
+    <form id="registerForm">
+      <label>Nombre</label>
+      <input required id="r_name" placeholder="Tu nombre" />
+
+      <div class="row">
+        <div style="flex:1">
+          <label>Edad</label>
+          <input type="number" min="12" max="100" required id="r_age" placeholder="18" />
+        </div>
+        <div style="flex:1">
+          <label>Correo (solo para identificar tu perfil en este dispositivo)</label>
+          <input type="email" required id="r_email" placeholder="tucorreo@ejemplo.com" />
+        </div>
+      </div>
+
+      <label>Intereses (elige algunos)</label>
+      <select id="r_interests" multiple size="5">
+        <option>Actividad física</option>
+        <option>Manejo del estrés</option>
+        <option>Hábitos de sueño</option>
+        <option>Red de apoyo</option>
+        <option>Nutrición</option>
+        <option>Estudio/productividad</option>
+      </select>
+
+      <label>Necesidades específicas</label>
+      <textarea id="r_needs" placeholder="Ej: control de antojos en fines de semana, límites con amigos..." rows="3"></textarea>
+
+      <label>Contraseña (se usa para cifrar tu información)</label>
+      <input type="password" required id="r_pass" placeholder="Mínimo 8 caracteres" />
+
+      <div class="row" style="margin-top:12px">
+        <button class="btn" type="submit">Crear cuenta segura</button>
+        <button class="btn ghost" type="button" id="fillDemo">Rellenar demo</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card pad">
+    <h3 class="title lg">Ingreso</h3>
+    <div class="divider"></div>
+    <form id="loginForm">
+      <label>Correo</label>
+      <input type="email" required id="l_email" placeholder="tucorreo@ejemplo.com" />
+      <label>Contraseña</label>
+      <input type="password" required id="l_pass" placeholder="••••••••" />
+      <div class="row" style="margin-top:12px">
+        <button class="btn" type="submit">Entrar</button>
+        <button class="btn warn" type="button" id="resetAll">Borrar datos de este dispositivo</button>
+      </div>
+      <p class="muted" style="margin-top:10px">¿Olvidaste tu contraseña? Por seguridad no puede recuperarse. Si la pierdes, deberás borrar el perfil y crear uno nuevo.</p>
+    </form>
+  </div>
+</section>
+
+<!-- App -->
+<section id="app" class="hidden" style="margin-top:16px">
+  <div class="grid grid-2">
+    <div class="card pad">
+      <div class="row" style="justify-content:space-between">
+        <div>
+          <div class="pill" id="privacyPill">🔒 Cifrado activo</div>
+          <h3 class="title lg" style="margin-top:8px">Hola, <span id="u_name"></span></h3>
+          <p class="muted" id="u_summary"></p>
+        </div>
+        <div class="row">
+          <button class="btn ghost" id="btnLogout">Cerrar sesión</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap:12px">
+        <div class="card pad">
+          <strong>Progreso total</strong>
+          <div class="progress" style="margin-top:8px"><i id="bar_total"></i></div>
+          <small class="muted">Capacitaciones completadas</small>
+        </div>
+        <div class="card pad">
+          <strong>Racha</strong>
+          <p class="title lg" id="streak">0 días</p>
+          <small class="muted">Marca al menos 1 tarea al día</small>
+        </div>
+        <div class="card pad">
+          <strong>Retos activos</strong>
+          <p class="title lg" id="activeChallenges">0</p>
+          <small class="muted">Puedes activar/desactivar en la sección Retos</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="card pad">
+      <strong>Preferencias</strong>
+      <div class="divider"></div>
+      <div class="row">
+        <div style="flex:1">
+          <label>Edad</label>
+          <input id="p_age" type="number" min="12" max="100" />
+        </div>
+        <div style="flex:2">
+          <label>Intereses</label>
+          <input id="p_interests" placeholder="Ej: deporte, sueño, manejo del estrés" />
+        </div>
+      </div>
+      <label style="margin-top:10px">Objetivo personal</label>
+      <input id="p_goal" placeholder="Ej: 30 días sin consumo, mejorar sueño, reducir antojos" />
+      <div class="row" style="margin-top:12px">
+        <button class="btn" id="savePrefs">Guardar preferencias</button>
+        <button class="btn ghost" id="exportData">Exportar datos (archivo .json)</button>
+        <input type="file" id="importFile" class="hidden" accept="application/json" />
+        <button class="btn ghost" id="importData">Importar datos</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid" style="grid-template-columns: 1fr; gap:16px; margin-top:16px">
+    <div class="card pad">
+      <div class="row" style="justify-content:space-between; align-items:center">
+        <strong>Capacitaciones</strong>
+        <span class="muted">Basadas en evidencia (psicoeducación breve)</span>
+      </div>
+      <div class="divider"></div>
+      <div id="modules" class="list"></div>
+    </div>
+
+    <div class="card pad">
+      <div class="row" style="justify-content:space-between; align-items:center">
+        <strong>Retos y tareas saludables</strong>
+        <span class="muted">Elige 2–3 por semana</span>
+      </div>
+      <div class="divider"></div>
+      <div id="challenges" class="list"></div>
+      <div class="divider"></div>
+      <div class="row">
+        <button class="btn" id="addCustomTask">Añadir tarea personalizada</button>
+        <button class="btn ghost" id="completeToday">Marcar día cumplido ✅</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </div>  <div class="toast" id="toast"></div>  <script>
+    // ——— Utilidades UI ———
+    const $ = (q) => document.querySelector(q);
+    const el = (tag, attrs = {}, children = []) => {
+      const n = document.createElement(tag);
+      Object.entries(attrs).forEach(([k, v]) => {
+        if (k === 'class') n.className = v; else if (k === 'html') n.innerHTML = v; else n.setAttribute(k, v);
+      });
+      children.forEach(c => n.appendChild(c));
+      return n;
+    };
+    const toast = (msg) => { const t = $('#toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(()=> t.style.display='none', 2000); };
+
+    // ——— Base64 helpers (robustos, sin spread gigante) ———
+    function bytesToBase64(bytes) {
+      let binary = '';
+      const chunk = 0x8000; // evitar desbordes
+      for (let i = 0; i < bytes.length; i += chunk) {
+        const sub = bytes.subarray(i, i + chunk);
+        binary += String.fromCharCode.apply(null, sub);
+      }
+      return btoa(binary);
+    }
+    function base64ToBytes(b64) {
+      const bin = atob(b64);
+      const len = bin.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) bytes[i] = bin.charCodeAt(i);
+      return bytes;
+    }
+
+    // ——— Cifrado local con Web Crypto (AES-GCM + PBKDF2) ———
+    const enc = new TextEncoder();
+    const dec = new TextDecoder();
+
+    function ensureCryptoReady() {
+      const problems = [];
+      if (!('crypto' in window)) problems.push('window.crypto no está disponible.');
+      if (!window.isSecureContext) problems.push('Esta página no está en un contexto seguro. Ábrela con HTTPS o en http://localhost.');
+      if (!window.crypto || !window.crypto.subtle) problems.push('WebCrypto SubtleCrypto no está disponible.');
+      const ok = problems.length === 0;
+      const banner = $('#diagBanner');
+      const text = $('#diagText');
+      if (!ok) {
+        text.textContent = problems.join(' ');
+        banner.classList.remove('hidden');
+        // Deshabilitar formularios
+        Array.from(document.querySelectorAll('#registerForm button, #loginForm button, #registerForm input, #loginForm input')).forEach(el => el.disabled = true);
+      } else {
+        banner.classList.add('hidden');
+      }
+      return ok;
+    }
+
+    async function deriveKey(password, salt) {
+      try {
+        const baseKey = await crypto.subtle.importKey('raw', enc.encode(password), { name:'PBKDF2' }, false, ['deriveKey']);
+        return await crypto.subtle.deriveKey(
+          { name:'PBKDF2', salt, iterations: 150000, hash: 'SHA-256' },
+          baseKey,
+          { name: 'AES-GCM', length: 256 },
+          false,
+          ['encrypt','decrypt']
+        );
+      } catch (e) {
+        console.error('deriveKey error:', e);
+        throw new Error('No se pudo derivar la clave (PBKDF2). Verifica el contexto seguro (HTTPS) y vuelve a intentar.');
+      }
+    }
+
+    async function encryptJSON(obj, password){
+      try {
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const salt = crypto.getRandomValues(new Uint8Array(16));
+        const key = await deriveKey(password, salt);
+        const data = enc.encode(JSON.stringify(obj));
+        const cipher = await crypto.subtle.encrypt({ name:'AES-GCM', iv, tagLength: 128 }, key, data);
+        return {
+          v:1,
+          iv: bytesToBase64(iv),
+          salt: bytesToBase64(salt),
+          c: bytesToBase64(new Uint8Array(cipher))
+        };
+      } catch (e) {
+        console.error('encryptJSON error:', e);
+        throw new Error('Error al cifrar los datos. Asegúrate de usar HTTPS/localhost.');
+      }
+    }
+
+    async function decryptJSON(bundle, password){
+      try {
+        const iv = base64ToBytes(bundle.iv);
+        const salt = base64ToBytes(bundle.salt);
+        const cipher = base64ToBytes(bundle.c);
+        const key = await deriveKey(password, salt);
+        const plain = await crypto.subtle.decrypt({ name:'AES-GCM', iv, tagLength: 128 }, key, cipher);
+        return JSON.parse(dec.decode(new Uint8Array(plain)));
+      } catch (e) {
+        console.error('decryptJSON error:', e);
+        // Unificar mensaje para el caso típico de contraseña errónea o contexto no apto
+        throw new Error('No se pudieron descifrar los datos (contraseña incorrecta o entorno inseguro).');
+      }
+    }
+
+    // ——— Persistencia ———
+    const DB_KEY = 'bs_profiles'; // múltiples perfiles por correo
+    const SESSION_KEY = 'bs_session';
+
+    function loadDB(){ try { return JSON.parse(localStorage.getItem(DB_KEY) || '{}'); } catch(e){ return {}; } }
+    function saveDB(db){ localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+    function setSession(email, bundle){ sessionStorage.setItem(SESSION_KEY, JSON.stringify({email, bundle})); }
+    function getSession(){ try { return JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null'); } catch(e){ return null; } }
+    function clearSession(){ sessionStorage.removeItem(SESSION_KEY); }
+
+    // ——— Modelo ———
+    const defaultModules = [
+      { id:'mitos', title:'Mitos vs. realidad del alcohol', minutes:10, bullets:[
+        'El “aguantar más” no es fortaleza: es tolerancia, y aumenta el riesgo.',
+        'El alcohol afecta memoria, sueño y estado de ánimo incluso en cantidades moderadas.',
+        'No existe “nivel seguro” universal: el riesgo es dosis‑dependiente.'
+      ]},
+      { id:'antojos', title:'Manejo de antojos (craving) en 4 pasos', minutes:8, bullets:[
+        'Nombra el antojo en voz baja ("estoy teniendo un antojo").',
+        'Respira 4‑7‑8 durante 1 minuto.',
+        'Retrasa 10 minutos y cambia el foco: camina, agua fría, estiramientos.',
+        'Contacta a tu red de apoyo si persiste.'
+      ]},
+      { id:'plan', title:'Plan personal de prevención de recaídas', minutes:12, bullets:[
+        'Identifica detonantes (lugares, emociones, personas).',
+        'Define respuestas alternativas y límites.',
+        'Prepara un “kit de emergencia” (contacto, mantra, actividad breve).'
+      ]},
+      { id:'sueno', title:'Sueño y recuperación', minutes:7, bullets:[
+        'Rutina regular, luz solar por la mañana.',
+        'Reduce pantallas 60 min antes de dormir.',
+        'Evita bebidas energizantes por la tarde.'
+      ]}
+    ];
+
+    const defaultChallenges = [
+      { id:'agua', text:'Beber 6–8 vasos de agua al día', area:'Salud' },
+      { id:'pasos', text:'Caminar 6.000–8.000 pasos', area:'Actividad física' },
+      { id:'respira', text:'Respirar 4‑7‑8 por 3 minutos', area:'Estrés' },
+      { id:'escribir', text:'Escribir 3 líneas de gratitud', area:'Ánimo' },
+      { id:'suenohig', text:'Higiene de sueño: sin pantallas 60 min antes', area:'Sueño' },
+      { id:'contacto', text:'Enviar un mensaje a tu red de apoyo', area:'Apoyo social' }
+    ];
+
+    // ——— Estado en memoria (después de login) ———
+    let current = null; // objeto de usuario (después de descifrar)
+    let password = '';
+
+    function newUser({name, age, email, interests, needs}){
+      return {
+        name, age, email,
+        prefs: { interests, needs, goal: '' },
+        streakDays: 0,
+        lastCheck: null,
+        trainings: defaultModules.map(m=>({id:m.id, done:false, completedAt:null})),
+        challenges: defaultChallenges.map(c=>({id:c.id, text:c.text, area:c.area, active: false})),
+        customTasks: [],
+        journal: [] // {date, note}
+      };
+    }
+
+    function computeProgress(user){
+      const total = user.trainings.length;
+      const done = user.trainings.filter(t=>t.done).length;
+      return Math.round((done/Math.max(1,total))*100);
+    }
+
+    function updateStreak(user){
+      const today = new Date().toISOString().slice(0,10);
+      if (user.lastCheck === today) return; // ya contado
+      const yday = new Date(Date.now()-86400000).toISOString().slice(0,10);
+      if (user.lastCheck === yday) user.streakDays += 1; else user.streakDays = 1;
+      user.lastCheck = today;
+    }
+
+    // ——— Renderizado ———
+    function renderApp(){
+      if (!current) return;
+      $('#authSection').classList.add('hidden');
+      $('#app').classList.remove('hidden');
+      $('#u_name').textContent = current.name.split(' ')[0];
+      const p = computeProgress(current);
+      $('#bar_total').style.width = p + '%';
+      $('#streak').textContent = `${current.streakDays} día${current.streakDays===1?'':'s'}`;
+      $('#activeChallenges').textContent = current.challenges.filter(c=>c.active).length;
+
+      const interests = current.prefs.interests?.length ? current.prefs.interests.join(', ') : 'sin especificar';
+      $('#u_summary').textContent = `Edad ${current.age}. Intereses: ${interests}. Objetivo: ${current.prefs.goal || '—'}.`;
+
+      // Prefs form
+      $('#p_age').value = current.age;
+      $('#p_interests').value = current.prefs.interests?.join(', ');
+      $('#p_goal').value = current.prefs.goal || '';
+
+      // Modules
+      const modRoot = $('#modules'); modRoot.innerHTML = '';
+      defaultModules.forEach(m => {
+        const st = current.trainings.find(t=>t.id===m.id) || { done:false };
+        const done = !!st.done;
+        const item = el('div', {class:'item'});
